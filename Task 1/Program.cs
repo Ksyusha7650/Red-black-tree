@@ -16,8 +16,6 @@ class Program
         Tree tree = new Tree();
         Tree.make_tree(elements, ref tree);
         Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
-        //tree.display_tree(tree);
-        tree.outp(tree, tree.height(tree));
     }
 }
 
