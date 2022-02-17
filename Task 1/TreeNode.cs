@@ -89,25 +89,6 @@ namespace Task_1
             }
         }
 
-        public void dis(Tree tree, int height)
-        {
-            TreeNode node = tree.root;
-            p(node);
-            while (node != null)
-            {
-                Console.WriteLine();
-                if ((node.left != null) && (node.right != null))
-                {
-                    Console.WriteLine();
-                    p(node.left);
-                    Console.Write("   ");
-                    p(node.right);
-                    if (!node.left.isLeaf) node = node.left;
-                }
-               
-            }
-        }
-
         public void p(TreeNode node)
         {
             Console.Write(node.data);
