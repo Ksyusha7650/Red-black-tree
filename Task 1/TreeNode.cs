@@ -88,12 +88,7 @@ namespace Task_1
                 }
             }
         }
-
-        public void p(TreeNode node)
-        {
-            Console.Write(node.data);
-        }
-
+        
         public void outp(Tree tree, int height)
         {
             TreeNode node = tree.root;
