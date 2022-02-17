@@ -61,65 +61,6 @@ namespace Task_1
             node2.parent = node1;
         }
 
-        public void output_node(TreeNode node, int width, int height)
-        {
-            if (node != null)
-            {
-                if (!node.isLeaf)
-                {
-                    if (node.color == ColorNode.BLACK)
-                        Console.ForegroundColor = ConsoleColor.Black;
-                    else Console.ForegroundColor = ConsoleColor.Red;
-                    for (int i = 0; i < height; i++) Console.WriteLine("");
-                    for (int j = 0; j < width+1; j++) Console.Write(" ");
-                    Console.Write("( " + node.data + ") ");
-                    Console.WriteLine();
-                    for (int j = 0; j < width - 2; j++) Console.Write(" ");
-                    if (node.left.isLeaf) Console.Write("NIL");
-                    Console.Write("( " + node.left.data + ") ");
-                    for (int j = 0; j < 2; j++) Console.Write(" ");
-                    if (node.right.isLeaf) Console.Write("NIL");
-                    Console.Write("( " + node.left.data + ") ");
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("NIL");
-                }
-            }
-        }
-        
-        public void outp(Tree tree, int height)
-        {
-            TreeNode node = tree.root;
-            if (node != null)
-            {
-                int temporary_height = 0;
-                output_node(node, height - temporary_height, temporary_height);
-                while (node != null)
-                {
-                    if (node.left.isLeaf == false)
-                    {
-                        node = node.left;
-                        temporary_height++;
-                        if (node.parent.right.isLeaf == false)
-                        {
-                            output_node(node, height - temporary_height, temporary_height);
-                            node = node.parent;
-                        }
-                    }
-                    if (node.right.isLeaf == false)
-                    {
-                        node = node.right;
-                        temporary_height++;
-                    }
-                    else if (node.parent.left.isLeaf) break;
-                }
-            }
-            else Console.WriteLine("Дерево пустое!");
-        }
-
-
         public int height(Tree tree)
         {
             int height_t = 0;
