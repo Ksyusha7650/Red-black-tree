@@ -16,6 +16,10 @@ class Program
         Tree tree = new Tree();
         Tree.make_tree(elements, ref tree);
         Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
+        Console.WriteLine("Корень дерева = " + tree.root.data);
+        tree.inorder_tree_walk(tree.root);
+        Console.WriteLine();
+        tree.print(tree);
     }
 }
 
