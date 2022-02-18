@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,11 +23,52 @@ namespace Task_1
         public TreeNode(bool is_leaf)=> isLeaf = is_leaf;
     }
 
-
     public class Tree
     {
         public TreeNode? root;
+        private const int COLUMN_WIDTH = 10;
+        public void inorder_tree_walk(TreeNode node)
+        {
+            if (node != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                if (!node.isLeaf)
+                {
+                    inorder_tree_walk(node.left);
+                    if (node.color == ColorNode.RED)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" ( " + node.data + " ) ");
+                    inorder_tree_walk(node.right);
+                }
+                else Console.Write (" NIL ");
+            }
+        }
 
+        public void print(Tree tree)
+        {
+            print(tree.root, 0);
+        }
+
+        private void print(TreeNode node, int space)
+        {
+
+            if (node is null)
+            {
+                return;
+            }
+
+            space += COLUMN_WIDTH;
+
+            print(node.right, space);
+
+            System.Console.WriteLine();
+            for (int i = COLUMN_WIDTH; i < space; i++)
+                Console.Write(" ");
+            if (node.isLeaf) Console.WriteLine("NIL");
+            else Console.WriteLine(node.data);
+
+            print(node.left, space);
+        }
 
         public void left_rotate(ref TreeNode head,TreeNode node1)
         {
@@ -35,6 +76,7 @@ namespace Task_1
             node1.right = node2.left;
             if (node2.left != null)
                 node2.left.parent = node1;
+            if (node2 != null)
             node2.parent = node1.parent;
             if (node1.parent == null)
                 head = node2;
@@ -47,10 +89,11 @@ namespace Task_1
 
         public void right_rotate(ref TreeNode head, TreeNode node1) 
         {
-            TreeNode node2 = node1.parent;
+            TreeNode node2 = node1.left;
             node2.left = node1.right;
-            if (node1.right != null)   //check
+            if (node1.right != null) 
                 node1.right.parent = node2;
+            if (node1 != null)
             node1.parent = node2.parent;
             if (node2.parent == null)
                 head = node1;
@@ -76,20 +119,19 @@ namespace Task_1
             }
             return height_t;
         }
-        public void display_tree(Tree tree)
-        {
-          /*  if (tree != null)
-                output_node(tree.root, 1);
-            else Console.WriteLine("Дерево пустое!");*/
-        }
-
-
         public void insert_node(ref TreeNode head, int value)
         {
             TreeNode new_node = new TreeNode(value);
+            if (head == null)
+            {
+                head = new_node;
+                head.color = ColorNode.BLACK;
+                head.left = new TreeNode(true);
+                head.right = new TreeNode(true);
+                return;
+            }
             TreeNode node1 = head;
             TreeNode node2 = new TreeNode(true);
-          
             while(node1.isLeaf == false)
             {
                 node2 = node1;
@@ -99,7 +141,7 @@ namespace Task_1
                 if (node1 == null) break;
             }
             new_node.parent = node2;
-            if (node2.isLeaf)
+            if ((node2.isLeaf) || (node2 == null))
                 head = new_node;
             else if (new_node.data < node2.data)
                 node2.left = new_node;
@@ -108,7 +150,6 @@ namespace Task_1
             new_node.right = new TreeNode(true);
             new_node.color = ColorNode.RED;
             insert_fix_up(ref head, ref new_node);
-           
         }
 
         public void insert_fix_up(ref TreeNode head, ref TreeNode new_node)
@@ -141,11 +182,11 @@ namespace Task_1
                 else
                 {
                     TreeNode node = new_node.parent.parent.left;
-                    if ((node != null) && (node.color == ColorNode.RED))
+                    if ((node != null) && (node.color == ColorNode.BLACK))
                         {
-                            new_node.parent.color = ColorNode.BLACK;
-                            node.color = ColorNode.BLACK;
-                            new_node.parent.parent.color = ColorNode.RED;
+                            new_node.parent.color = ColorNode.RED;
+                            node.color = ColorNode.RED;
+                            new_node.parent.parent.color = ColorNode.BLACK;
                             new_node = new_node.parent.parent;
                         }
                         else 
@@ -168,8 +209,7 @@ namespace Task_1
         {
             if (elements.Count != 0)
             {
-                tree.root = new TreeNode(elements[0]);
-                for(int i = 1; i < elements.Count; i++)
+                for(int i = 0; i < elements.Count; i++)
                     tree.insert_node(ref tree.root, elements[i]);
             }
         }
