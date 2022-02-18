@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,8 @@ namespace Task_1
             + "из файла и случайными числами.");
         }
 
-        public static void input_amount(ref int amount){
+        public static void input_amount(ref int amount)
+        {
             bool check_input = false;
             Console.WriteLine("Введите количество элементов: ");
             while (!check_input)
@@ -37,9 +38,9 @@ namespace Task_1
             bool check_input = false;
             int choice = 0;
             Console.WriteLine("Выберите способ заполнения дерева: "
-            + Environment.NewLine + "[1] - ввод вручную" + Environment.NewLine + "[2] - ввод случайным образом" 
-            + Environment.NewLine + "[3] - взять данные из файла" );
-            while (!check_input) 
+            + Environment.NewLine + "[1] - ввод вручную" + Environment.NewLine + "[2] - ввод случайным образом"
+            + Environment.NewLine + "[3] - взять данные из файла");
+            while (!check_input)
             {
                 choice = get_int(ref check_input);
                 if ((choice < 1) || (choice > 3))
@@ -57,12 +58,94 @@ namespace Task_1
                     input_randomally(amount, ref elements);
                     break;
                 case 3:
-                    Console.WriteLine("Вы выбрали ввод из файла."); 
+                    Console.WriteLine("Вы выбрали ввод из файла.");
                     break;
             }
             Console.WriteLine("Введенные элементы: ");
             foreach (Int32 element in elements)
                 Console.Write(element + " ");
+        }
+
+        public static void menu_tree(Tree tree)
+        {
+            bool check_input = false;
+            int choice = 0;
+            Console.WriteLine(Environment.NewLine + "..............................");
+            Console.WriteLine("Выберите пункт меню: "
+            + Environment.NewLine + "[1] - Добавить элемент в дерево" + Environment.NewLine + "[2] - Удалить элемент из дерева"
+            + Environment.NewLine + "[3] - Поиск элемента в дереве" + Environment.NewLine + "[4] - Показать обход дерева"
+            + Environment.NewLine + "[5] - Высота дерева" + Environment.NewLine + "[6] - Показать дерево"
+            + Environment.NewLine + "[7] - Минимальный элемент дерева" + Environment.NewLine + "[8] - Максимальный элемент дерева"
+            + Environment.NewLine + "[9] - Сохранить дерево в файл" + Environment.NewLine + "[10] - Выйти");
+            while (!check_input)
+            {
+                choice = get_int(ref check_input);
+                if ((choice < 1) || (choice > 10))
+                {
+                    Console.WriteLine("Такого пункта в меню нет. Повторите ввод: ");
+                    check_input = false;
+                }
+            }
+            switch (choice)
+            {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    check_input = false;
+                    int key = 0;
+                    Console.WriteLine("Введите значение элемента, которого хотите найти: ");
+                    while (!check_input)
+                    {
+                        key = get_int(ref check_input);
+                    }
+                    TreeNode searched = tree.tree_search(key, tree.root);
+                    if (searched != null)
+                        Console.WriteLine(searched.data);
+                    menu_tree(tree);
+                    break;
+                case 4:
+                    tree.inorder_tree_walk(tree.root);
+                    menu_tree(tree);
+                    break;
+
+                case 5:
+                    Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
+                    menu_tree(tree);
+                    break;
+
+                case 7:
+                    Console.WriteLine("Минимальный элемент = " + tree.tree_minimum(tree.root).data);
+                    menu_tree(tree);
+                    break;
+                case 8:
+                    Console.WriteLine("Максимальный элемент = " + tree.tree_maximum(tree.root).data);
+                    menu_tree(tree);
+                    break;
+
+                case 10:
+                    Console.WriteLine("Вы уверены?"
+                     + Environment.NewLine + "[1] - нет" + Environment.NewLine + "[2] - да");
+                    check_input = false;
+                    while (!check_input)
+                    {
+                        choice = get_int(ref check_input);
+                    }
+                    switch (choice)
+                    {
+                        case 2:
+                            Environment.Exit(1);
+                            break;
+                        default:
+                            Console.WriteLine("Зачтем за нет");
+                            menu_tree(tree);
+                            break;
+                    }
+                    break;
+            }
         }
     }
 }
