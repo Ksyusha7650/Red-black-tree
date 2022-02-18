@@ -222,8 +222,6 @@ namespace Task_1
                 {
                     tree.insert_node(ref tree.root, elements[index]);
                 }
-
-
             }
         }
 
