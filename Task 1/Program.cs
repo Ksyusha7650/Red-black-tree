@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Task_1;
 
 class Program
@@ -15,11 +15,10 @@ class Program
         Interface.choose_input(amount, ref elements);
         Tree tree = new Tree();
         Tree.make_tree(elements, ref tree);
-        Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
         Console.WriteLine("Корень дерева = " + tree.root.data);
         tree.inorder_tree_walk(tree.root);
-        Console.WriteLine();
         tree.print(tree);
+        Interface.menu_tree(tree);
     }
 }
 
