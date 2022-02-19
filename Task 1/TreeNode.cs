@@ -209,8 +209,6 @@ namespace Task_1
         {
             if (elements.Count != 0)
             {
-                /*  for(int i = 0; i < elements.Count; i++)
-                      tree.insert_node(ref tree.root, elements[i]);*/
                 elements.Sort();
                 int mid = elements.Count / 2;
                 tree.insert_node(ref tree.root, elements[mid]);
@@ -254,6 +252,102 @@ namespace Task_1
         {
             while (!node.right.isLeaf) node = node.right;
             return node;
+        }
+
+        public void transplant(Tree tree, TreeNode node1, TreeNode node2)
+        {
+            if (node1.parent.isLeaf)
+                tree.root = node2;
+            else if (node1 == node1.parent.left)
+                node1.parent.left = node2;
+            else node1.parent.right = node2;
+            node2.parent = node1.parent;
+        }
+
+        public void delete_node(Tree tree, int value)
+        {
+            TreeNode deleting_node = tree_search(value, tree.root);
+            if (deleting_node == null) return;
+            else
+            {
+                TreeNode node2 = deleting_node;
+                ColorNode node2_color = node2.color;
+                TreeNode node1 = new TreeNode(false);
+                if (deleting_node.left.isLeaf)
+                {
+                    node1 = deleting_node.left;
+                    transplant(tree, deleting_node, deleting_node.right);
+                }
+                else if (deleting_node.right.isLeaf)
+                {
+                    node1 = deleting_node.left;
+                    transplant(tree, deleting_node, deleting_node.left);
+                }
+                else
+                {
+                    node2 = tree_minimum(deleting_node.right);
+                    node2_color = node2.color;
+                    node1 = node2.right;
+                    if (node2.parent == deleting_node)
+                        node1.parent = node2;
+                    else
+                    {
+                        transplant(tree, node2, node2.right);
+                        node2.right = deleting_node.right;
+                        node2.right.parent = node2;
+                    }
+                    transplant(tree, deleting_node, node2);
+                    node2.left = deleting_node.left;
+                    node2.left.parent = node2;
+                    node2.color = deleting_node.color;
+                }
+                if (node2_color == ColorNode.BLACK)
+                    delete_fixup(tree, node1);
+            }
+
+        }
+
+        public void delete_fixup(Tree tree, TreeNode node)
+        {
+            while ((node != tree.root) && (node.color == ColorNode.BLACK))
+            {
+                if (node == node.parent.left)
+                {
+                    TreeNode node1 = node.parent.right;
+                    if (node1.color == ColorNode.RED)
+                    {
+                        node1.color = ColorNode.BLACK;
+                        node.parent.color = ColorNode.RED;
+                        left_rotate(ref tree.root, node.parent);
+                        node1 = node.parent.left;
+                    }
+                    if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
+                    {
+                        node1.color = ColorNode.RED;
+                        node = node.parent;
+                    }
+                    else
+                    {
+                        if (node1.right.color == ColorNode.BLACK)
+                        {
+                            node1.left.color = ColorNode.BLACK;
+                            node1.color |= ColorNode.RED;
+                            right_rotate(ref tree.root, node1);
+                            node1 = node.parent.right;
+                        }
+                        node1.color = node.parent.color;
+                        node.parent.color = ColorNode.BLACK;
+                        node1.right.color = ColorNode.BLACK;
+                        left_rotate(ref tree.root, node.parent);
+                        node = tree.root;
+                    }
+                }
+                else
+                {
+                    //Наоборот...
+                }
+            }
+            node.color = ColorNode.BLACK;
         }
     }
 }
