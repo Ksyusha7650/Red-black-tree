@@ -17,10 +17,10 @@ namespace Task_1
         public TreeNode? right;
         public TreeNode? parent;
         public ColorNode color = ColorNode.BLACK;
-        public bool isLeaf = false;
+        public bool is_leaf = false;
         public TreeNode? node { get; set; }
         public TreeNode(int value) => data = value;
-        public TreeNode(bool is_leaf) => isLeaf = is_leaf;
+        public TreeNode(bool is_leaf_m) => is_leaf = is_leaf_m;
     }
 
     public class Tree
@@ -32,7 +32,7 @@ namespace Task_1
             if (node != null)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
-                if (!node.isLeaf)
+                if (!node.is_leaf)
                 {
                     inorder_tree_walk(node.left);
                     if (node.color == ColorNode.RED)
@@ -43,6 +43,43 @@ namespace Task_1
                 else Console.Write(" NIL ");
             }
         }
+
+        public void preorder_tree_walk(TreeNode node)
+        {
+            if (node != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                if (!node.is_leaf)
+                {
+                    if (node.color == ColorNode.RED)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" ( " + node.data + " ) ");
+                    preorder_tree_walk(node.left);
+                    preorder_tree_walk(node.right);
+                }
+                else Console.Write(" NIL ");
+            }
+        }
+
+        public void postorder_tree_walk(TreeNode node)
+        {
+            if (node != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                if (!node.is_leaf)
+                {
+                    preorder_tree_walk(node.left);
+                    preorder_tree_walk(node.right);
+                    if (node.color == ColorNode.RED)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" ( " + node.data + " ) ");
+
+
+                }
+                else Console.Write(" NIL ");
+            }
+        }
+
 
         public void print(Tree tree)
         {
@@ -65,7 +102,7 @@ namespace Task_1
             System.Console.WriteLine();
             for (int i = COLUMN_WIDTH; i < space; i++)
                 Console.Write(" ");
-            if (node.isLeaf) Console.WriteLine("NIL");
+            if (node.is_leaf) Console.WriteLine("NIL");
             else
             {
                 if (node.color == ColorNode.RED) Console.ForegroundColor = ConsoleColor.Red;
@@ -138,7 +175,7 @@ namespace Task_1
             }
             TreeNode node1 = head;
             TreeNode node2 = new TreeNode(true);
-            while (node1.isLeaf == false)
+            while (node1.is_leaf == false)
             {
                 node2 = node1;
                 if (new_node.data < node1.data)
@@ -147,7 +184,7 @@ namespace Task_1
                 if (node1 == null) break;
             }
             new_node.parent = node2;
-            if ((node2.isLeaf) || (node2 == null))
+            if ((node2.is_leaf) || (node2 == null))
                 head = new_node;
             else if (new_node.data < node2.data)
                 node2.left = new_node;
@@ -187,11 +224,11 @@ namespace Task_1
                 else
                 {
                     TreeNode node = new_node.parent.parent.left;
-                    if ((node != null) && (node.color == ColorNode.BLACK))
+                    if ((node != null) && (node.color == ColorNode.RED))
                     {
-                        new_node.parent.color = ColorNode.RED;
-                        node.color = ColorNode.RED;
-                        new_node.parent.parent.color = ColorNode.BLACK;
+                        new_node.parent.color = ColorNode.BLACK;
+                        node.color = ColorNode.BLACK;
+                        new_node.parent.parent.color = ColorNode.RED;
                         new_node = new_node.parent.parent;
                     }
                     else if (new_node != head)
@@ -230,7 +267,7 @@ namespace Task_1
 
         public TreeNode tree_search(int key, TreeNode node)
         {
-            if (!node.isLeaf)
+            if (!node.is_leaf)
             {
 
                 if (key == node.data)
@@ -249,27 +286,32 @@ namespace Task_1
 
         public TreeNode tree_minimum(TreeNode node)
         {
-            while (!node.left.isLeaf) node = node.left;
-            return node;
+            if (!node.is_leaf)
+            {
+                while (!node.left.is_leaf) node = node.left;
+                return node;
+            }
+            else return null;
         }
 
         public TreeNode tree_maximum(TreeNode node)
         {
-            while (!node.right.isLeaf) node = node.right;
-            return node;
+            if (!node.is_leaf)
+            {
+                while (!node.right.is_leaf) node = node.right;
+                return node;
+            }
+            else return null;
         }
 
         public void transplant(Tree tree, TreeNode node1, TreeNode node2)
         {
-            if (node1.parent != null)
-            {
-                if (node1.parent.isLeaf)
-                    tree.root = node2;
-                else if (node1 == node1.parent.left)
-                    node1.parent.left = node2;
-                else node1.parent.right = node2;
-                node2.parent = node1.parent;
-            }
+            if ((node1.parent == null) || (node1.parent.is_leaf))
+                tree.root = node2;
+            else if (node1 == node1.parent.left)
+                node1.parent.left = node2;
+            else node1.parent.right = node2;
+            node2.parent = node1.parent;
         }
 
         public void delete_node(Tree tree, int value)
@@ -279,14 +321,14 @@ namespace Task_1
             else
             {
                 TreeNode node2 = deleting_node;
-                ColorNode node2_color = node2.color;
+                ColorNode node2_color_original = node2.color;
                 TreeNode node1 = new TreeNode(false);
-                if (deleting_node.left.isLeaf)
+                if ((deleting_node.left.is_leaf) || (deleting_node.left == null) && (deleting_node.right != null))
                 {
-                    node1 = deleting_node.left;
+                    node1 = deleting_node.right;
                     transplant(tree, deleting_node, deleting_node.right);
                 }
-                else if (deleting_node.right.isLeaf)
+                else if ((deleting_node.right.is_leaf) || (deleting_node.right == null))
                 {
                     node1 = deleting_node.left;
                     transplant(tree, deleting_node, deleting_node.left);
@@ -294,7 +336,7 @@ namespace Task_1
                 else
                 {
                     node2 = tree_minimum(deleting_node.right);
-                    node2_color = node2.color;
+                    node2_color_original = node2.color;
                     node1 = node2.right;
                     if (node2.parent == deleting_node)
                         node1.parent = node2;
@@ -309,7 +351,7 @@ namespace Task_1
                     node2.left.parent = node2;
                     node2.color = deleting_node.color;
                 }
-                if (node2_color == ColorNode.BLACK)
+                if (node2_color_original == ColorNode.BLACK)
                     delete_fixup(tree, node1);
             }
 
@@ -327,16 +369,16 @@ namespace Task_1
                         node1.color = ColorNode.BLACK;
                         node.parent.color = ColorNode.RED;
                         left_rotate(ref tree.root, node.parent);
-                        node1 = node.parent.left;
+                        node1 = node.parent.right;
                     }
-                    if ((node1.left != null) && (node1.right != null))
+                    if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
                     {
-                        if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
-                        {
-                            node1.color = ColorNode.RED;
-                            node = node.parent;
-                        }
-                        else if (node1.right.color == ColorNode.BLACK)
+                        node1.color = ColorNode.RED;
+                        node = node.parent;
+                    }
+                    else
+                    {
+                        if (node1.right.color == ColorNode.BLACK)
                         {
                             node1.left.color = ColorNode.BLACK;
                             node1.color |= ColorNode.RED;
@@ -360,28 +402,29 @@ namespace Task_1
                         right_rotate(ref tree.root, node.parent);
                         node1 = node.parent.left;
                     }
-                    if ((node1.right.color == ColorNode.BLACK) && (node1.left.color == ColorNode.BLACK))
+                    if ((node1.right.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
                     {
-                        node1.color = ColorNode.BLACK;
+                        node1.color = ColorNode.RED;
                         node = node.parent;
                     }
-                    else if (node1.left.color == ColorNode.BLACK)
+                    else
                     {
-                        node1.right.color = ColorNode.BLACK;
-                        node1.color = ColorNode.RED;
-                        left_rotate(ref tree.root, node1);
-                        node1 = node.parent.left;
+                        if (node1.left.color == ColorNode.BLACK)
+                        {
+                            node1.right.color = ColorNode.BLACK;
+                            node1.color = ColorNode.RED;
+                            left_rotate(ref tree.root, node1);
+                            node1 = node.parent.left;
+                        }
+                        node1.color = node.parent.color;
+                        node.parent.color = ColorNode.BLACK;
+                        node1.left.color = ColorNode.BLACK;
+                        right_rotate(ref tree.root, node.parent);
+                        node = tree.root;
                     }
-                    node1.color = node.parent.color;
-                    node.parent.color = ColorNode.BLACK;
-                    node1.left.color = ColorNode.BLACK;
-                    right_rotate(ref tree.root, node.parent);
-                    node = tree.root;
                 }
             }
-            if (node != null)
-                node.color = ColorNode.BLACK;
+            node.color = ColorNode.BLACK;
         }
     }
-
 }

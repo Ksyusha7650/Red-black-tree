@@ -15,10 +15,7 @@ class Program
         Interface.choose_input(amount, ref elements);
         Tree tree = new Tree();
         Tree.make_tree(elements, ref tree);
-        Console.WriteLine("Корень дерева = " + tree.root.data);
-        tree.inorder_tree_walk(tree.root);
         tree.print(tree);
-        Interface.menu_tree(tree);
+        Interface.menu_tree(tree, ref elements);
     }
 }
-
