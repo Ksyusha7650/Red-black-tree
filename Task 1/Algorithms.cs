@@ -31,12 +31,17 @@ namespace Task_1
             Console.WriteLine("Вы выбрали ввод вручную.");
             for (int i = 0; i < amount; i++)
             {
-                bool check_input = false;
-                while (!check_input)
-                {
-                    Console.WriteLine("Введите " + (i + 1) + " элемент:");
-                    elements.Add(get_int(ref check_input));
-                }
+                input_node(i, ref elements);
+            }
+        }
+
+        public static void input_node(int index, ref List<Int32> elements)
+        {
+            bool check_input = false;
+            while (!check_input)
+            {
+                Console.WriteLine("Введите " + (index + 1) + " элемент:");
+                elements.Add(get_int(ref check_input));
             }
         }
 
@@ -62,5 +67,101 @@ namespace Task_1
             }
         }
 
+        public static void file_input(int amount, ref List<Int32> elements)
+        {
+            bool check_input = false;
+            bool f_time = true;
+            while (!check_input)
+            {
+                if (f_time)
+                    Console.WriteLine("Укажите путь, где хранится файл с данными: ");
+                f_time = false;
+                String path = Console.ReadLine();
+                //var path = @"c:\home\2.txt";
+                /*   using (StreamWriter sw = File.CreateText(path))
+                   {
+                       sw.WriteLine("ПРИВЕТ!!");
+                   }*/
+                if (File.Exists(path))
+                {
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        string line = "";
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            int res = 0;
+                            string[] nums = line.Split(' ');
+                            foreach (string num in nums)
+                            {
+                                if (int.TryParse(num, out res))
+                                {
+                                    res = Int32.Parse(num);
+                                    if (elements.Count < amount)
+                                        elements.Add(res);
+                                }
+                            }
+                        }
+                    }
+                    if (elements.Count == amount)
+                        check_input = true;
+                    Console.WriteLine("Файл некорректен. Повторите ввод: ");
+                }
+                else Console.WriteLine("Файл не найден. Повторите ввод: ");
+            }
+        }
+
+        public static void rewrite_file()
+        {
+
+        }
+
+        public static void create_file()
+        {
+
+        }
+
+        public static void file_save(int amount, ref List<Int32> elements)
+        {
+            bool check_input = false;
+            bool f_time = true;
+            while (!check_input)
+            {
+                if (f_time)
+                    Console.WriteLine("Укажите путь, куда записать файл с деревом: ");
+                f_time = false;
+                String path = Console.ReadLine();
+                //var path = @"c:\home\2.txt";
+                if (File.Exists(path))
+                {
+                    Console.WriteLine("Перезаписать файл?" + Environment.NewLine + "[1] -  Да" + Environment.NewLine + "[2] - Нет");
+                    int choice = 0;
+                    check_input = false;
+                    while (!check_input)
+                    {
+                        choice = get_int(ref check_input);
+                    }
+                    switch (choice)
+                    {
+                        case 1:
+                            rewrite_file();
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            Console.WriteLine("Зачтем за нет");
+                            break;
+                    }
+
+                }
+                else
+                {
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.WriteLine("ПРИВЕТ!!");
+                    }
+                    Console.WriteLine("Файл не найден. Повторите ввод: ");
+                }
+            }
+        }
     }
 }
