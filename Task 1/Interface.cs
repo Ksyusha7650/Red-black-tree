@@ -58,7 +58,7 @@ namespace Task_1
                     input_randomally(amount, ref elements);
                     break;
                 case 3:
-                    file_input(amount, ref elements, true);
+                    file_input(amount, ref elements);
                     break;
             }
             Console.WriteLine("Введенные элементы: ");
@@ -66,7 +66,7 @@ namespace Task_1
                 Console.Write(element + " ");
         }
 
-        public static void menu_tree(Tree tree)
+        public static void menu_tree(Tree tree, ref List<Int32> elements)
         {
             bool check_input = false;
             int choice = 0;
@@ -90,7 +90,13 @@ namespace Task_1
             switch (choice)
             {
                 case 1:
-
+                    check_input = false;
+                    Console.WriteLine("Введите значение элемента, который хотите вставить: ");
+                    while (!check_input)
+                    {
+                        key = get_int(ref check_input);
+                    }
+                    tree.insert_node(ref tree.root, key);
                     break;
                 case 2:
                     check_input = false;
@@ -100,7 +106,7 @@ namespace Task_1
                         key = get_int(ref check_input);
                     }
                     tree.delete_node(tree, key);
-                    menu_tree(tree);
+                    menu_tree(tree, ref elements);
                     break;
                 case 3:
                     check_input = false;
@@ -112,34 +118,38 @@ namespace Task_1
                     TreeNode searched = tree.tree_search(key, tree.root);
                     if (searched != null)
                         Console.WriteLine(searched.data);
-                    menu_tree(tree);
                     break;
                 case 4:
+                    Console.WriteLine("Прямой обход дерева: ");
+                    tree.preorder_tree_walk(tree.root);
+                    Console.WriteLine();
+                    Console.WriteLine("Центрированный обход дерева: ");
                     tree.inorder_tree_walk(tree.root);
-                    menu_tree(tree);
+                    Console.WriteLine();
+                    Console.WriteLine("Обратный обход дерева: ");
+                    tree.postorder_tree_walk(tree.root);
                     break;
 
                 case 5:
-                    Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
-                    menu_tree(tree);
+                    Console.WriteLine("Высота дерева = " + tree.height(tree).ToString());
                     break;
                 case 6:
                     tree.print(tree);
-                    menu_tree(tree);
                     break;
 
                 case 7:
-                    Console.WriteLine("Минимальный элемент = " + tree.tree_minimum(tree.root).data);
-                    menu_tree(tree);
+                    if (tree.root != null)
+                        Console.WriteLine("Минимальный элемент = " + tree.tree_minimum(tree.root).data);
+                    else Console.WriteLine("Минимального элемента нет");
                     break;
                 case 8:
-                    Console.WriteLine("Максимальный элемент = " + tree.tree_maximum(tree.root).data);
-                    menu_tree(tree);
+                    if (tree.root != null)
+                        Console.WriteLine("Максимальный элемент = " + tree.tree_maximum(tree.root).data);
+                    else Console.WriteLine("Минимального элемента нет");
                     break;
 
                 case 10:
-                    Console.WriteLine("Вы уверены?"
-                     + Environment.NewLine + "[1] - Да" + Environment.NewLine + "[2] - Нет");
+                    Console.WriteLine("Вы уверены?" + Environment.NewLine + "[1] - Да" + Environment.NewLine + "[2] - Нет");
                     check_input = false;
                     while (!check_input)
                     {
@@ -151,16 +161,14 @@ namespace Task_1
                             Environment.Exit(1);
                             break;
                         case 2:
-                            menu_tree(tree);
                             break;
                         default:
                             Console.WriteLine("Зачтем за нет");
-                            menu_tree(tree);
                             break;
                     }
                     break;
             }
+            menu_tree(tree, ref elements);
         }
     }
 }
-
