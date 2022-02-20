@@ -51,6 +51,7 @@ namespace Task_1
 
         private void print(TreeNode node, int space)
         {
+            Console.ForegroundColor = ConsoleColor.Black;
 
             if (node is null)
             {
@@ -65,7 +66,11 @@ namespace Task_1
             for (int i = COLUMN_WIDTH; i < space; i++)
                 Console.Write(" ");
             if (node.isLeaf) Console.WriteLine("NIL");
-            else Console.WriteLine(node.data);
+            else
+            {
+                if (node.color == ColorNode.RED) Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(node.data);
+            }
 
             print(node.left, space);
         }
@@ -227,7 +232,7 @@ namespace Task_1
         {
             if (!node.isLeaf)
             {
-                Console.Write(node.data + " -> ");
+
                 if (key == node.data)
                     return node;
 
@@ -256,12 +261,15 @@ namespace Task_1
 
         public void transplant(Tree tree, TreeNode node1, TreeNode node2)
         {
-            if (node1.parent.isLeaf)
-                tree.root = node2;
-            else if (node1 == node1.parent.left)
-                node1.parent.left = node2;
-            else node1.parent.right = node2;
-            node2.parent = node1.parent;
+            if (node1.parent != null)
+            {
+                if (node1.parent.isLeaf)
+                    tree.root = node2;
+                else if (node1 == node1.parent.left)
+                    node1.parent.left = node2;
+                else node1.parent.right = node2;
+                node2.parent = node1.parent;
+            }
         }
 
         public void delete_node(Tree tree, int value)
@@ -321,14 +329,14 @@ namespace Task_1
                         left_rotate(ref tree.root, node.parent);
                         node1 = node.parent.left;
                     }
-                    if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
+                    if ((node1.left != null) && (node1.right != null))
                     {
-                        node1.color = ColorNode.RED;
-                        node = node.parent;
-                    }
-                    else
-                    {
-                        if (node1.right.color == ColorNode.BLACK)
+                        if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
+                        {
+                            node1.color = ColorNode.RED;
+                            node = node.parent;
+                        }
+                        else if (node1.right.color == ColorNode.BLACK)
                         {
                             node1.left.color = ColorNode.BLACK;
                             node1.color |= ColorNode.RED;
@@ -344,10 +352,36 @@ namespace Task_1
                 }
                 else
                 {
-                    //Наоборот...
+                    TreeNode node1 = node.parent.left;
+                    if (node1.color == ColorNode.RED)
+                    {
+                        node1.color = ColorNode.BLACK;
+                        node.parent.color = ColorNode.RED;
+                        right_rotate(ref tree.root, node.parent);
+                        node1 = node.parent.left;
+                    }
+                    if ((node1.right.color == ColorNode.BLACK) && (node1.left.color == ColorNode.BLACK))
+                    {
+                        node1.color = ColorNode.BLACK;
+                        node = node.parent;
+                    }
+                    else if (node1.left.color == ColorNode.BLACK)
+                    {
+                        node1.right.color = ColorNode.BLACK;
+                        node1.color = ColorNode.RED;
+                        left_rotate(ref tree.root, node1);
+                        node1 = node.parent.left;
+                    }
+                    node1.color = node.parent.color;
+                    node.parent.color = ColorNode.BLACK;
+                    node1.left.color = ColorNode.BLACK;
+                    right_rotate(ref tree.root, node.parent);
+                    node = tree.root;
                 }
             }
-            node.color = ColorNode.BLACK;
+            if (node != null)
+                node.color = ColorNode.BLACK;
         }
     }
+
 }

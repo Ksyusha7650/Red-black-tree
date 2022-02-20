@@ -26,9 +26,9 @@ namespace Task_1
             while (!check_input)
             {
                 amount = get_int(ref check_input);
-                if (amount < 0)
+                if (amount <= 0)
                 {
-                    Console.WriteLine("Количество элементов не может быть отрицательным, повторите ввод: ");
+                    Console.WriteLine("Количество элементов не может быть неположительным, повторите ввод: ");
                     check_input = false;
                 }
             }
@@ -38,8 +38,8 @@ namespace Task_1
             bool check_input = false;
             int choice = 0;
             Console.WriteLine("Выберите способ заполнения дерева: "
-            + Environment.NewLine + "[1] - ввод вручную" + Environment.NewLine + "[2] - ввод случайным образом"
-            + Environment.NewLine + "[3] - взять данные из файла");
+            + Environment.NewLine + "[1] - Ввод вручную" + Environment.NewLine + "[2] - Ввод случайным образом"
+            + Environment.NewLine + "[3] - Взять данные из файла");
             while (!check_input)
             {
                 choice = get_int(ref check_input);
@@ -58,7 +58,7 @@ namespace Task_1
                     input_randomally(amount, ref elements);
                     break;
                 case 3:
-                    Console.WriteLine("Вы выбрали ввод из файла.");
+                    file_input(amount, ref elements, true);
                     break;
             }
             Console.WriteLine("Введенные элементы: ");
@@ -70,6 +70,7 @@ namespace Task_1
         {
             bool check_input = false;
             int choice = 0;
+            int key = 0;
             Console.WriteLine(Environment.NewLine + "..............................");
             Console.WriteLine("Выберите пункт меню: "
             + Environment.NewLine + "[1] - Добавить элемент в дерево" + Environment.NewLine + "[2] - Удалить элемент из дерева"
@@ -92,11 +93,17 @@ namespace Task_1
 
                     break;
                 case 2:
-
+                    check_input = false;
+                    Console.WriteLine("Введите значение элемента, который хотите удалить: ");
+                    while (!check_input)
+                    {
+                        key = get_int(ref check_input);
+                    }
+                    tree.delete_node(tree, key);
+                    menu_tree(tree);
                     break;
                 case 3:
                     check_input = false;
-                    int key = 0;
                     Console.WriteLine("Введите значение элемента, которого хотите найти: ");
                     while (!check_input)
                     {
@@ -116,6 +123,10 @@ namespace Task_1
                     Console.WriteLine("Размер дерева = " + tree.height(tree).ToString());
                     menu_tree(tree);
                     break;
+                case 6:
+                    tree.print(tree);
+                    menu_tree(tree);
+                    break;
 
                 case 7:
                     Console.WriteLine("Минимальный элемент = " + tree.tree_minimum(tree.root).data);
@@ -128,7 +139,7 @@ namespace Task_1
 
                 case 10:
                     Console.WriteLine("Вы уверены?"
-                     + Environment.NewLine + "[1] - нет" + Environment.NewLine + "[2] - да");
+                     + Environment.NewLine + "[1] - Да" + Environment.NewLine + "[2] - Нет");
                     check_input = false;
                     while (!check_input)
                     {
@@ -136,8 +147,11 @@ namespace Task_1
                     }
                     switch (choice)
                     {
-                        case 2:
+                        case 1:
                             Environment.Exit(1);
+                            break;
+                        case 2:
+                            menu_tree(tree);
                             break;
                         default:
                             Console.WriteLine("Зачтем за нет");
@@ -149,3 +163,4 @@ namespace Task_1
         }
     }
 }
+
