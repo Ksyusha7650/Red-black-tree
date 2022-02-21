@@ -7,6 +7,9 @@ using static Task_1.Algorithms;
 
 namespace Task_1
 {
+    public enum Menu { ADD = 1, DELETE, SEARCH, ORDER, HEIGHT, SHOW, MIN, MAX, SAVE, EXIT };
+
+    public enum Type_input { MANUALLY = 1, RANDOMLY, FILE }
     public class Interface
     {
         public static void greetings()
@@ -40,24 +43,26 @@ namespace Task_1
             Console.WriteLine("Выберите способ заполнения дерева: "
             + Environment.NewLine + "[1] - Ввод вручную" + Environment.NewLine + "[2] - Ввод случайным образом"
             + Environment.NewLine + "[3] - Взять данные из файла");
+            Type_input type_input = Type_input.MANUALLY;
             while (!check_input)
             {
                 choice = get_int(ref check_input);
-                if ((choice < 1) || (choice > 3))
+                type_input = (Type_input)choice;
+                if ((type_input < Type_input.MANUALLY) || (type_input > Type_input.FILE))
                 {
                     Console.WriteLine("Введите либо 1, либо 2, либо 3.");
                     check_input = false;
                 }
             }
-            switch (choice)
+            switch (type_input)
             {
-                case 1:
+                case Type_input.MANUALLY:
                     input_manually(amount, ref elements);
                     break;
-                case 2:
+                case Type_input.RANDOMLY:
                     input_randomally(amount, ref elements);
                     break;
-                case 3:
+                case Type_input.FILE:
                     file_input(amount, ref elements);
                     break;
             }
@@ -71,6 +76,7 @@ namespace Task_1
             bool check_input = false;
             int choice = 0;
             int key = 0;
+            Menu menu_choice = Menu.ADD;
             Console.WriteLine(Environment.NewLine + "..............................");
             Console.WriteLine("Выберите пункт меню: "
             + Environment.NewLine + "[1] - Добавить элемент в дерево" + Environment.NewLine + "[2] - Удалить элемент из дерева"
@@ -81,15 +87,16 @@ namespace Task_1
             while (!check_input)
             {
                 choice = get_int(ref check_input);
-                if ((choice < 1) || (choice > 10))
+                menu_choice = (Menu)choice;
+                if ((menu_choice < Menu.ADD) || (menu_choice > Menu.EXIT))
                 {
                     Console.WriteLine("Такого пункта в меню нет. Повторите ввод: ");
                     check_input = false;
                 }
             }
-            switch (choice)
+            switch (menu_choice)
             {
-                case 1:
+                case Menu.ADD:
                     check_input = false;
                     Console.WriteLine("Введите значение элемента, который хотите вставить: ");
                     while (!check_input)
@@ -98,7 +105,7 @@ namespace Task_1
                     }
                     tree.insert_node(ref tree.root, key);
                     break;
-                case 2:
+                case Menu.DELETE:
                     check_input = false;
                     Console.WriteLine("Введите значение элемента, который хотите удалить: ");
                     while (!check_input)
@@ -108,7 +115,7 @@ namespace Task_1
                     tree.delete_node(tree, key);
                     menu_tree(tree, ref elements);
                     break;
-                case 3:
+                case Menu.SEARCH:
                     check_input = false;
                     Console.WriteLine("Введите значение элемента, которого хотите найти: ");
                     while (!check_input)
@@ -119,7 +126,7 @@ namespace Task_1
                     if (searched != null)
                         Console.WriteLine(searched.data);
                     break;
-                case 4:
+                case Menu.ORDER:
                     Console.WriteLine("Прямой обход дерева: ");
                     tree.preorder_tree_walk(tree.root);
                     Console.WriteLine();
@@ -130,25 +137,26 @@ namespace Task_1
                     tree.postorder_tree_walk(tree.root);
                     break;
 
-                case 5:
+                case Menu.HEIGHT:
                     Console.WriteLine("Высота дерева = " + tree.height(tree).ToString());
                     break;
-                case 6:
-                    tree.print(tree);
+                case Menu.SHOW:
+                    tree.display_tree(tree);
                     break;
-
-                case 7:
+                case Menu.MIN:
                     if (tree.root != null)
                         Console.WriteLine("Минимальный элемент = " + tree.tree_minimum(tree.root).data);
                     else Console.WriteLine("Минимального элемента нет");
                     break;
-                case 8:
+                case Menu.MAX:
                     if (tree.root != null)
                         Console.WriteLine("Максимальный элемент = " + tree.tree_maximum(tree.root).data);
                     else Console.WriteLine("Минимального элемента нет");
                     break;
-
-                case 10:
+                case Menu.SAVE:
+                    Algorithms.file_save(ref elements);
+                    break;
+                case Menu.EXIT:
                     Console.WriteLine("Вы уверены?" + Environment.NewLine + "[1] - Да" + Environment.NewLine + "[2] - Нет");
                     check_input = false;
                     while (!check_input)
