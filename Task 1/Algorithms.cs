@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Task_1
 {
+
+    public enum Choice { YES = 1, NO }
     public static class Algorithms
     {
 
@@ -77,11 +79,6 @@ namespace Task_1
                     Console.WriteLine("Укажите путь, где хранится файл с данными: ");
                 f_time = false;
                 String path = Console.ReadLine();
-                //var path = @"c:\home\2.txt";
-                /*   using (StreamWriter sw = File.CreateText(path))
-                   {
-                       sw.WriteLine("ПРИВЕТ!!");
-                   }*/
                 if (File.Exists(path))
                 {
                     using (StreamReader sr = File.OpenText(path))
@@ -110,20 +107,22 @@ namespace Task_1
             }
         }
 
-        public static void rewrite_file()
+        public static void create_file(String path, List<Int32> elements)
         {
-
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                foreach (Int32 element in elements)
+                {
+                    sw.Write(element + " ");
+                }
+            }
         }
 
-        public static void create_file()
-        {
-
-        }
-
-        public static void file_save(int amount, ref List<Int32> elements)
+        public static void file_save(ref List<Int32> elements)
         {
             bool check_input = false;
             bool f_time = true;
+
             while (!check_input)
             {
                 if (f_time)
@@ -136,30 +135,31 @@ namespace Task_1
                     Console.WriteLine("Перезаписать файл?" + Environment.NewLine + "[1] -  Да" + Environment.NewLine + "[2] - Нет");
                     int choice = 0;
                     check_input = false;
+                    Choice choice_enum;
                     while (!check_input)
                     {
                         choice = get_int(ref check_input);
                     }
-                    switch (choice)
+                    choice_enum = (Choice)choice;
+                    bool choice_input = false;
+                    while (!choice_input)
                     {
-                        case 1:
-                            rewrite_file();
-                            break;
-                        case 2:
-                            break;
-                        default:
-                            Console.WriteLine("Зачтем за нет");
-                            break;
+                        switch (choice_enum)
+                        {
+                            case Choice.YES:
+                                create_file(path, elements);
+                                choice_input = true;
+                                break;
+                            case Choice.NO:
+                                Console.WriteLine("Введите путь заново: ");
+                                break;
+                        }
                     }
-
                 }
                 else
                 {
-                    using (StreamWriter sw = File.CreateText(path))
-                    {
-                        sw.WriteLine("ПРИВЕТ!!");
-                    }
-                    Console.WriteLine("Файл не найден. Повторите ввод: ");
+                    Console.WriteLine("Файл не найден. Документ будет создан по данному пути: " + Environment.NewLine + path);
+                    create_file(path, elements);
                 }
             }
         }
