@@ -15,7 +15,7 @@ class Program
         Interface.choose_input(amount, ref elements);
         Tree tree = new Tree();
         Tree.make_tree(elements, ref tree);
-        tree.print(tree);
+        tree.display_tree(tree);
         Interface.menu_tree(tree, ref elements);
     }
 }
