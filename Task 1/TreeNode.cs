@@ -26,7 +26,7 @@ namespace Task_1
     public class Tree
     {
         public TreeNode? root;
-        private const int COLUMN_WIDTH = 10;
+        private const int SPACE_ELEMENTS = 5;
         public void inorder_tree_walk(TreeNode node)
         {
             if (node != null)
@@ -80,27 +80,17 @@ namespace Task_1
             }
         }
 
-
-        public void print(Tree tree)
-        {
-            print(tree.root, 0);
-        }
-
-        private void print(TreeNode node, int space)
+        public void output_node(TreeNode node, int space)
         {
             Console.ForegroundColor = ConsoleColor.Black;
-
             if (node is null)
             {
                 return;
             }
-
-            space += COLUMN_WIDTH;
-
-            print(node.right, space);
-
-            System.Console.WriteLine();
-            for (int i = COLUMN_WIDTH; i < space; i++)
+            space += SPACE_ELEMENTS;
+            output_node(node.right, space);
+            Console.WriteLine();
+            for (int i = SPACE_ELEMENTS; i < space; i++)
                 Console.Write(" ");
             if (node.is_leaf) Console.WriteLine("NIL");
             else
@@ -108,8 +98,12 @@ namespace Task_1
                 if (node.color == ColorNode.RED) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(node.data);
             }
+            output_node(node.left, space);
+        }
 
-            print(node.left, space);
+        public void display_tree(Tree tree)
+        {
+            output_node(tree.root, 0);
         }
 
         public void left_rotate(ref TreeNode head, TreeNode node1)
@@ -161,6 +155,21 @@ namespace Task_1
                 else break;
             }
             return height_t;
+        }
+        public int depth(Tree tree)
+        {
+            int depth_t = 0;
+            TreeNode node = tree.root;
+            while (node != null)
+            {
+                depth_t++;
+                if (node.left != null)
+                    node = node.left;
+                else if (node.right != null)
+                    node = node.right;
+                else break;
+            }
+            return depth_t;
         }
         public void insert_node(ref TreeNode head, int value)
         {
@@ -286,22 +295,14 @@ namespace Task_1
 
         public TreeNode tree_minimum(TreeNode node)
         {
-            if (!node.is_leaf)
-            {
-                while (!node.left.is_leaf) node = node.left;
-                return node;
-            }
-            else return null;
+            while (!node.left.is_leaf) node = node.left;
+            return node;
         }
 
         public TreeNode tree_maximum(TreeNode node)
         {
-            if (!node.is_leaf)
-            {
-                while (!node.right.is_leaf) node = node.right;
-                return node;
-            }
-            else return null;
+            while (!node.right.is_leaf) node = node.right;
+            return node;
         }
 
         public void transplant(Tree tree, TreeNode node1, TreeNode node2)
