@@ -17,59 +17,59 @@ namespace Task_1
         public TreeNode? right;
         public TreeNode? parent;
         public ColorNode color = ColorNode.BLACK;
-        public bool is_leaf = false;
-        public TreeNode? node { get; set; }
+        public bool isLeaf = false;
+        //public TreeNode? node { get; set; }
         public TreeNode(int value) => data = value;
-        public TreeNode(bool is_leaf_m) => is_leaf = is_leaf_m;
+        public TreeNode(bool isLeafM) => isLeaf = isLeafM;
     }
 
     public class Tree
     {
         public TreeNode? root;
-        private const int COLUMN_WIDTH = 10;
-        public void inorder_tree_walk(TreeNode node)
+        private const int SPACE_ELEMENTS = 5;
+        public void InorderTreeWalk(TreeNode node)
         {
             if (node != null)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
-                if (!node.is_leaf)
+                if (!node.isLeaf)
                 {
-                    inorder_tree_walk(node.left);
+                    InorderTreeWalk(node.left);
                     if (node.color == ColorNode.RED)
                         Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(" ( " + node.data + " ) ");
-                    inorder_tree_walk(node.right);
+                    InorderTreeWalk(node.right);
                 }
                 else Console.Write(" NIL ");
             }
         }
 
-        public void preorder_tree_walk(TreeNode node)
+        public void PreorderTreeWalk(TreeNode node)
         {
             if (node != null)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
-                if (!node.is_leaf)
+                if (!node.isLeaf)
                 {
                     if (node.color == ColorNode.RED)
                         Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(" ( " + node.data + " ) ");
-                    preorder_tree_walk(node.left);
-                    preorder_tree_walk(node.right);
+                    PreorderTreeWalk(node.left);
+                    PreorderTreeWalk(node.right);
                 }
                 else Console.Write(" NIL ");
             }
         }
 
-        public void postorder_tree_walk(TreeNode node)
+        public void PostorderTreeWalk(TreeNode node)
         {
             if (node != null)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
-                if (!node.is_leaf)
+                if (!node.isLeaf)
                 {
-                    preorder_tree_walk(node.left);
-                    preorder_tree_walk(node.right);
+                    PreorderTreeWalk(node.left);
+                    PreorderTreeWalk(node.right);
                     if (node.color == ColorNode.RED)
                         Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(" ( " + node.data + " ) ");
@@ -80,39 +80,33 @@ namespace Task_1
             }
         }
 
-
-        public void print(Tree tree)
-        {
-            print(tree.root, 0);
-        }
-
-        private void print(TreeNode node, int space)
+        public void OutputNode(TreeNode node, int space)
         {
             Console.ForegroundColor = ConsoleColor.Black;
-
             if (node is null)
             {
                 return;
             }
-
-            space += COLUMN_WIDTH;
-
-            print(node.right, space);
-
-            System.Console.WriteLine();
-            for (int i = COLUMN_WIDTH; i < space; i++)
+            space += SPACE_ELEMENTS;
+            OutputNode(node.right, space);
+            Console.WriteLine();
+            for (int i = SPACE_ELEMENTS; i < space; i++)
                 Console.Write(" ");
-            if (node.is_leaf) Console.WriteLine("NIL");
+            if (node.isLeaf) Console.WriteLine("NIL");
             else
             {
                 if (node.color == ColorNode.RED) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(node.data);
             }
-
-            print(node.left, space);
+            OutputNode(node.left, space);
         }
 
-        public void left_rotate(ref TreeNode head, TreeNode node1)
+        public void DisplayTree(Tree tree)
+        {
+            OutputNode(tree.root, 0);
+        }
+
+        public void LeftRotate(ref TreeNode head, TreeNode node1)
         {
             TreeNode node2 = node1.right;
             node1.right = node2.left;
@@ -129,7 +123,7 @@ namespace Task_1
             node1.parent = node2;
         }
 
-        public void right_rotate(ref TreeNode head, TreeNode node2)
+        public void RightRotate(ref TreeNode head, TreeNode node2)
         {
             TreeNode node1 = node2.left;
             node2.left = node1.right;
@@ -146,28 +140,28 @@ namespace Task_1
             node2.parent = node1;
         }
 
-        public int height(Tree tree)
+        public int Height(Tree tree)
         {
-            int height_t = 0;
+            int heightTemp = 0;
             TreeNode node = tree.root;
             while (node != null)
             {
                 if ((node.color == ColorNode.BLACK) && (node != tree.root))
-                    height_t++;
+                    heightTemp++;
                 if (node.left != null)
                     node = node.left;
                 else if (node.right != null)
                     node = node.right;
                 else break;
             }
-            return height_t;
+            return heightTemp;
         }
-        public void insert_node(ref TreeNode head, int value)
+        public void InsertNode(ref TreeNode head, int value)
         {
-            TreeNode new_node = new TreeNode(value);
+            TreeNode newNode = new TreeNode(value);
             if (head == null)
             {
-                head = new_node;
+                head = newNode;
                 head.color = ColorNode.BLACK;
                 head.left = new TreeNode(true);
                 head.right = new TreeNode(true);
@@ -175,107 +169,107 @@ namespace Task_1
             }
             TreeNode node1 = head;
             TreeNode node2 = new TreeNode(true);
-            while (node1.is_leaf == false)
+            while (node1.isLeaf == false)
             {
                 node2 = node1;
-                if (new_node.data < node1.data)
+                if (newNode.data < node1.data)
                     node1 = node1.left;
                 else node1 = node1.right;
                 if (node1 == null) break;
             }
-            new_node.parent = node2;
-            if ((node2.is_leaf) || (node2 == null))
-                head = new_node;
-            else if (new_node.data < node2.data)
-                node2.left = new_node;
-            else node2.right = new_node;
-            new_node.left = new TreeNode(true);
-            new_node.right = new TreeNode(true);
-            new_node.color = ColorNode.RED;
-            insert_fix_up(ref head, ref new_node);
+            newNode.parent = node2;
+            if ((node2.isLeaf) || (node2 == null))
+                head = newNode;
+            else if (newNode.data < node2.data)
+                node2.left = newNode;
+            else node2.right = newNode;
+            newNode.left = new TreeNode(true);
+            newNode.right = new TreeNode(true);
+            newNode.color = ColorNode.RED;
+            InsertFixUp(ref head, ref newNode);
         }
 
-        public void insert_fix_up(ref TreeNode head, ref TreeNode new_node)
+        public void InsertFixUp(ref TreeNode head, ref TreeNode newNode)
         {
-            while (new_node != head && new_node.parent.color == ColorNode.RED)
+            while (newNode != head && newNode.parent.color == ColorNode.RED)
             {
-                if (new_node.parent == new_node.parent.parent.left)
+                if (newNode.parent == newNode.parent.parent.left)
                 {
-                    TreeNode node = new_node.parent.parent.right;
+                    TreeNode node = newNode.parent.parent.right;
                     if ((node != null) && (node.color == ColorNode.RED))
                     {
-                        new_node.parent.color = ColorNode.BLACK;
+                        newNode.parent.color = ColorNode.BLACK;
                         node.color = ColorNode.BLACK;
-                        new_node.parent.parent.color = ColorNode.RED;
-                        new_node = new_node.parent.parent;
+                        newNode.parent.parent.color = ColorNode.RED;
+                        newNode = newNode.parent.parent;
                     }
-                    else if (new_node != head)
+                    else if (newNode != head)
                     {
-                        if (new_node == new_node.parent.right)
+                        if (newNode == newNode.parent.right)
                         {
-                            new_node = new_node.parent;
-                            left_rotate(ref head, new_node);
+                            newNode = newNode.parent;
+                            LeftRotate(ref head, newNode);
                         }
-                        new_node.parent.color = ColorNode.BLACK;
-                        new_node.parent.parent.color = ColorNode.RED;
-                        right_rotate(ref head, new_node.parent.parent);
+                        newNode.parent.color = ColorNode.BLACK;
+                        newNode.parent.parent.color = ColorNode.RED;
+                        RightRotate(ref head, newNode.parent.parent);
                     }
                 }
                 else
                 {
-                    TreeNode node = new_node.parent.parent.left;
+                    TreeNode node = newNode.parent.parent.left;
                     if ((node != null) && (node.color == ColorNode.RED))
                     {
-                        new_node.parent.color = ColorNode.BLACK;
+                        newNode.parent.color = ColorNode.BLACK;
                         node.color = ColorNode.BLACK;
-                        new_node.parent.parent.color = ColorNode.RED;
-                        new_node = new_node.parent.parent;
+                        newNode.parent.parent.color = ColorNode.RED;
+                        newNode = newNode.parent.parent;
                     }
-                    else if (new_node != head)
+                    else if (newNode != head)
                     {
-                        if (new_node == new_node.parent.left)
+                        if (newNode == newNode.parent.left)
                         {
-                            new_node = new_node.parent;
-                            right_rotate(ref head, new_node);
+                            newNode = newNode.parent;
+                            RightRotate(ref head, newNode);
                         }
-                        new_node.parent.color = ColorNode.BLACK;
-                        new_node.parent.parent.color = ColorNode.RED;
-                        left_rotate(ref head, new_node.parent.parent);
+                        newNode.parent.color = ColorNode.BLACK;
+                        newNode.parent.parent.color = ColorNode.RED;
+                        LeftRotate(ref head, newNode.parent.parent);
                     }
                 }
                 head.color = ColorNode.BLACK;
             }
         }
 
-        public static void make_tree(List<Int32> elements, ref Tree tree)
+        public static void MakeTree(List<Int32> elements, ref Tree tree)
         {
             if (elements.Count != 0)
             {
                 elements.Sort();
                 int mid = elements.Count / 2;
-                tree.insert_node(ref tree.root, elements[mid]);
+                tree.InsertNode(ref tree.root, elements[mid]);
                 for (int index = mid - 1; index >= 0; index--)
                 {
-                    tree.insert_node(ref tree.root, elements[index]);
+                    tree.InsertNode(ref tree.root, elements[index]);
                 }
                 for (int index = mid + 1; index < elements.Count; index++)
                 {
-                    tree.insert_node(ref tree.root, elements[index]);
+                    tree.InsertNode(ref tree.root, elements[index]);
                 }
             }
         }
 
-        public TreeNode tree_search(int key, TreeNode node)
+        public TreeNode TreeSearch(int key, TreeNode node)
         {
-            if (!node.is_leaf)
+            if (!node.isLeaf)
             {
 
                 if (key == node.data)
                     return node;
 
                 if (key < node.data)
-                    return tree_search(key, node.left);
-                else return tree_search(key, node.right);
+                    return TreeSearch(key, node.left);
+                else return TreeSearch(key, node.right);
             }
             else
             {
@@ -284,29 +278,21 @@ namespace Task_1
             }
         }
 
-        public TreeNode tree_minimum(TreeNode node)
+        public TreeNode TreeMinimum(TreeNode node)
         {
-            if (!node.is_leaf)
-            {
-                while (!node.left.is_leaf) node = node.left;
-                return node;
-            }
-            else return null;
+            while (!node.left.isLeaf) node = node.left;
+            return node;
         }
 
-        public TreeNode tree_maximum(TreeNode node)
+        public TreeNode TreeMaximum(TreeNode node)
         {
-            if (!node.is_leaf)
-            {
-                while (!node.right.is_leaf) node = node.right;
-                return node;
-            }
-            else return null;
+            while (!node.right.isLeaf) node = node.right;
+            return node;
         }
 
-        public void transplant(Tree tree, TreeNode node1, TreeNode node2)
+        public void Transplant(Tree tree, TreeNode node1, TreeNode node2)
         {
-            if ((node1.parent == null) || (node1.parent.is_leaf))
+            if ((node1.parent == null) || (node1.parent.isLeaf))
                 tree.root = node2;
             else if (node1 == node1.parent.left)
                 node1.parent.left = node2;
@@ -314,50 +300,50 @@ namespace Task_1
             node2.parent = node1.parent;
         }
 
-        public void delete_node(Tree tree, int value)
+        public void DeleteNode(Tree tree, int value)
         {
-            TreeNode deleting_node = tree_search(value, tree.root);
-            if (deleting_node == null) return;
+            TreeNode deletingNode = TreeSearch(value, tree.root);
+            if (deletingNode == null) return;
             else
             {
-                TreeNode node2 = deleting_node;
-                ColorNode node2_color_original = node2.color;
+                TreeNode node2 = deletingNode;
+                ColorNode node2ColorOriginal = node2.color;
                 TreeNode node1 = new TreeNode(false);
-                if ((deleting_node.left.is_leaf) || (deleting_node.left == null) && (deleting_node.right != null))
+                if ((deletingNode.left.isLeaf) || (deletingNode.left == null) && (deletingNode.right != null))
                 {
-                    node1 = deleting_node.right;
-                    transplant(tree, deleting_node, deleting_node.right);
+                    node1 = deletingNode.right;
+                    Transplant(tree, deletingNode, deletingNode.right);
                 }
-                else if ((deleting_node.right.is_leaf) || (deleting_node.right == null))
+                else if ((deletingNode.right.isLeaf) || (deletingNode.right == null))
                 {
-                    node1 = deleting_node.left;
-                    transplant(tree, deleting_node, deleting_node.left);
+                    node1 = deletingNode.left;
+                    Transplant(tree, deletingNode, deletingNode.left);
                 }
                 else
                 {
-                    node2 = tree_minimum(deleting_node.right);
-                    node2_color_original = node2.color;
+                    node2 = TreeMinimum(deletingNode.right);
+                    node2ColorOriginal = node2.color;
                     node1 = node2.right;
-                    if (node2.parent == deleting_node)
+                    if (node2.parent == deletingNode)
                         node1.parent = node2;
                     else
                     {
-                        transplant(tree, node2, node2.right);
-                        node2.right = deleting_node.right;
+                        Transplant(tree, node2, node2.right);
+                        node2.right = deletingNode.right;
                         node2.right.parent = node2;
                     }
-                    transplant(tree, deleting_node, node2);
-                    node2.left = deleting_node.left;
+                    Transplant(tree, deletingNode, node2);
+                    node2.left = deletingNode.left;
                     node2.left.parent = node2;
-                    node2.color = deleting_node.color;
+                    node2.color = deletingNode.color;
                 }
-                if (node2_color_original == ColorNode.BLACK)
-                    delete_fixup(tree, node1);
+                if (node2ColorOriginal == ColorNode.BLACK)
+                    DeleteFixUp(tree, node1);
             }
 
         }
 
-        public void delete_fixup(Tree tree, TreeNode node)
+        public void DeleteFixUp(Tree tree, TreeNode node)
         {
             while ((node != tree.root) && (node.color == ColorNode.BLACK))
             {
@@ -368,7 +354,7 @@ namespace Task_1
                     {
                         node1.color = ColorNode.BLACK;
                         node.parent.color = ColorNode.RED;
-                        left_rotate(ref tree.root, node.parent);
+                        LeftRotate(ref tree.root, node.parent);
                         node1 = node.parent.right;
                     }
                     if ((node1.left.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
@@ -382,13 +368,13 @@ namespace Task_1
                         {
                             node1.left.color = ColorNode.BLACK;
                             node1.color |= ColorNode.RED;
-                            right_rotate(ref tree.root, node1);
+                            RightRotate(ref tree.root, node1);
                             node1 = node.parent.right;
                         }
                         node1.color = node.parent.color;
                         node.parent.color = ColorNode.BLACK;
                         node1.right.color = ColorNode.BLACK;
-                        left_rotate(ref tree.root, node.parent);
+                        LeftRotate(ref tree.root, node.parent);
                         node = tree.root;
                     }
                 }
@@ -399,7 +385,7 @@ namespace Task_1
                     {
                         node1.color = ColorNode.BLACK;
                         node.parent.color = ColorNode.RED;
-                        right_rotate(ref tree.root, node.parent);
+                        RightRotate(ref tree.root, node.parent);
                         node1 = node.parent.left;
                     }
                     if ((node1.right.color == ColorNode.BLACK) && (node1.right.color == ColorNode.BLACK))
@@ -413,13 +399,13 @@ namespace Task_1
                         {
                             node1.right.color = ColorNode.BLACK;
                             node1.color = ColorNode.RED;
-                            left_rotate(ref tree.root, node1);
+                            LeftRotate(ref tree.root, node1);
                             node1 = node.parent.left;
                         }
                         node1.color = node.parent.color;
                         node.parent.color = ColorNode.BLACK;
                         node1.left.color = ColorNode.BLACK;
-                        right_rotate(ref tree.root, node.parent);
+                        RightRotate(ref tree.root, node.parent);
                         node = tree.root;
                     }
                 }
