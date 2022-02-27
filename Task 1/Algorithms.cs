@@ -11,55 +11,53 @@ namespace Task_1
     public static class Algorithms
     {
 
-        public static int get_int(ref bool check_input)
+        public static int GetInt(ref bool checkInput)
         {
             string str = Console.ReadLine();
             int res = 0;
             if (int.TryParse(str, out res))
             {
                 res = Int32.Parse(str);
-                check_input = true;
+                checkInput = true;
             }
             else
             {
                 Console.WriteLine("Ожидалось число, повторите ввод:");
-                check_input = false;
+                checkInput = false;
             }
             return res;
         }
 
-        public static void input_manually(int amount, ref List<Int32> elements)
+        public static void InputManually(int amount, ref List<Int32> elements)
         {
-            Console.WriteLine("Вы выбрали ввод вручную.");
             for (int i = 0; i < amount; i++)
             {
-                input_node(i, ref elements);
+                InputNode(i, ref elements);
             }
         }
 
-        public static void input_node(int index, ref List<Int32> elements)
+        public static void InputNode(int index, ref List<Int32> elements)
         {
-            bool check_input = false;
-            while (!check_input)
+            bool checkInput = false;
+            while (!checkInput)
             {
                 Console.WriteLine("Введите " + (index + 1) + " элемент:");
-                elements.Add(get_int(ref check_input));
+                elements.Add(GetInt(ref checkInput));
             }
         }
 
-        public static void input_randomally(int amount, ref List<Int32> elements)
+        public static void InputRandomally(int amount, ref List<Int32> elements)
         {
-            Console.WriteLine("Вы выбрали ввод случайным образом.");
             bool refer = true;
             int from = 0, to = 0;
             Random rand = new Random();
             Console.WriteLine("Введите диапазон генерации чисел: ");
             Console.Write("От: ");
-            from = get_int(ref refer);
+            from = GetInt(ref refer);
             while (to < from)
             {
                 Console.Write("До: ");
-                to = get_int(ref refer);
+                to = GetInt(ref refer);
                 if (to < from)
                     Console.WriteLine("Введите число больше начала диапозона");
             }
@@ -69,15 +67,15 @@ namespace Task_1
             }
         }
 
-        public static void file_input(int amount, ref List<Int32> elements)
+        public static void FileInput(ref List<Int32> elements)
         {
-            bool check_input = false;
-            bool f_time = true;
-            while (!check_input)
+            bool checkInput = false;
+            bool fTime = true;
+            while (!checkInput)
             {
-                if (f_time)
+                if (fTime)
                     Console.WriteLine("Укажите путь, где хранится файл с данными: ");
-                f_time = false;
+                fTime = false;
                 String path = Console.ReadLine();
                 if (File.Exists(path))
                 {
@@ -93,21 +91,18 @@ namespace Task_1
                                 if (int.TryParse(num, out res))
                                 {
                                     res = Int32.Parse(num);
-                                    if (elements.Count < amount)
-                                        elements.Add(res);
+                                    elements.Add(res);
                                 }
                             }
                         }
                     }
-                    if (elements.Count == amount)
-                        check_input = true;
-                    Console.WriteLine("Файл некорректен. Повторите ввод: ");
+                    checkInput = true;
                 }
                 else Console.WriteLine("Файл не найден. Повторите ввод: ");
             }
         }
 
-        public static void create_file(String path, List<Int32> elements)
+        public static void CreateFile(String path, List<Int32> elements)
         {
             using (StreamWriter sw = File.CreateText(path))
             {
@@ -118,37 +113,37 @@ namespace Task_1
             }
         }
 
-        public static void file_save(ref List<Int32> elements)
+        public static void FileSave(ref List<Int32> elements)
         {
-            bool check_input = false;
-            bool f_time = true;
+            bool checkInput = false;
+            bool fTime = true;
 
-            while (!check_input)
+            while (!checkInput)
             {
-                if (f_time)
+                if (fTime)
                     Console.WriteLine("Укажите путь, куда записать файл с деревом: ");
-                f_time = false;
+                fTime = false;
                 String path = Console.ReadLine();
                 //var path = @"c:\home\2.txt";
                 if (File.Exists(path))
                 {
                     Console.WriteLine("Перезаписать файл?" + Environment.NewLine + "[1] -  Да" + Environment.NewLine + "[2] - Нет");
                     int choice = 0;
-                    check_input = false;
-                    Choice choice_enum;
-                    while (!check_input)
+                    checkInput = false;
+                    Choice choiceEnum;
+                    while (!checkInput)
                     {
-                        choice = get_int(ref check_input);
+                        choice = GetInt(ref checkInput);
                     }
-                    choice_enum = (Choice)choice;
-                    bool choice_input = false;
-                    while (!choice_input)
+                    choiceEnum = (Choice)choice;
+                    bool choiceInput = false;
+                    while (!choiceInput)
                     {
-                        switch (choice_enum)
+                        switch (choiceEnum)
                         {
                             case Choice.YES:
-                                create_file(path, elements);
-                                choice_input = true;
+                                CreateFile(path, elements);
+                                choiceInput = true;
                                 break;
                             case Choice.NO:
                                 Console.WriteLine("Введите путь заново: ");
@@ -159,7 +154,8 @@ namespace Task_1
                 else
                 {
                     Console.WriteLine("Файл не найден. Документ будет создан по данному пути: " + Environment.NewLine + path);
-                    create_file(path, elements);
+                    CreateFile(path, elements);
+                    checkInput = true;
                 }
             }
         }
