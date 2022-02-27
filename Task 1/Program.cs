@@ -8,7 +8,6 @@ class Program
         Console.BackgroundColor = ConsoleColor.White;
         Console.ForegroundColor = ConsoleColor.Black;
         Console.Clear();
-        int amount = 0;
         List<Int32> elements = new List<Int32>();
         Interface.greetings();
         Interface.choose_input(ref elements);
