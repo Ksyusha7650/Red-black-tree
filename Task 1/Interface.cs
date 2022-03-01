@@ -9,10 +9,10 @@ namespace Task_1
 {
     public enum Menu { ADD = 1, DELETE, SEARCH, ORDER, HEIGHT, SHOW, MIN, MAX, SAVE, EXIT };
 
-    public enum typeInput { MANUALLY = 1, RANDOMLY, FILE }
+    public enum TypeInput { MANUALLY = 1, RANDOMLY, FILE }
     public class Interface
     {
-        public static void greetings()
+        public static void Greetings()
         {
             Console.WriteLine("Программу выполнила Рухлова Ксения Алексеевна."
             + Environment.NewLine + "Группа: 404." + Environment.NewLine + "Вариант: 6." + Environment.NewLine + "Задача номер 2:"
@@ -22,7 +22,7 @@ namespace Task_1
             + "из файла и случайными числами.");
         }
 
-        public static void input_amount(ref int amount)
+        public static void InputAmount(ref int amount)
         {
             bool checkInput = false;
             Console.WriteLine("Введите количество элементов: ");
@@ -36,7 +36,7 @@ namespace Task_1
                 }
             }
         }
-        public static void choose_input(ref List<Int32> elements)
+        public static void ChooseInput(ref List<Int32> elements)
         {
             bool checkInput = false;
             int choice = 0;
@@ -44,12 +44,12 @@ namespace Task_1
             Console.WriteLine("Выберите способ заполнения дерева: "
             + Environment.NewLine + "[1] - Ввод вручную" + Environment.NewLine + "[2] - Ввод случайным образом"
             + Environment.NewLine + "[3] - Взять данные из файла");
-            typeInput type_input = typeInput.MANUALLY;
+            TypeInput type_input = TypeInput.MANUALLY;
             while (!checkInput)
             {
                 choice = GetInt(ref checkInput);
-                type_input = (typeInput)choice;
-                if ((type_input < typeInput.MANUALLY) || (type_input > typeInput.FILE))
+                type_input = (TypeInput)choice;
+                if ((type_input < TypeInput.MANUALLY) || (type_input > TypeInput.FILE))
                 {
                     Console.WriteLine("Введите либо 1, либо 2, либо 3.");
                     checkInput = false;
@@ -57,15 +57,15 @@ namespace Task_1
             }
             switch (type_input)
             {
-                case typeInput.MANUALLY:
-                    Interface.input_amount(ref amount);
+                case TypeInput.MANUALLY:
+                    Interface.InputAmount(ref amount);
                     InputManually(amount, ref elements);
                     break;
-                case typeInput.RANDOMLY:
-                    Interface.input_amount(ref amount);
+                case TypeInput.RANDOMLY:
+                    Interface.InputAmount(ref amount);
                     InputRandomally(amount, ref elements);
                     break;
-                case typeInput.FILE:
+                case TypeInput.FILE:
                     FileInput(ref elements);
                     break;
             }
@@ -74,12 +74,12 @@ namespace Task_1
                 Console.Write(element + " ");
         }
 
-        public static void menu_tree(Tree tree, ref List<Int32> elements)
+        public static void MenuTree(Tree tree, ref List<Int32> elements)
         {
             bool checkInput = false;
             int choice = 0;
             int key = 0;
-            Menu menu_choice = Menu.ADD;
+            Menu menuChoice = Menu.ADD;
             Console.WriteLine(Environment.NewLine + "..............................");
             Console.WriteLine("Выберите пункт меню: "
             + Environment.NewLine + "[1] - Добавить элемент в дерево" + Environment.NewLine + "[2] - Удалить элемент из дерева"
@@ -90,14 +90,14 @@ namespace Task_1
             while (!checkInput)
             {
                 choice = GetInt(ref checkInput);
-                menu_choice = (Menu)choice;
-                if ((menu_choice < Menu.ADD) || (menu_choice > Menu.EXIT))
+                menuChoice = (Menu)choice;
+                if ((menuChoice < Menu.ADD) || (menuChoice > Menu.EXIT))
                 {
                     Console.WriteLine("Такого пункта в меню нет. Повторите ввод: ");
                     checkInput = false;
                 }
             }
-            switch (menu_choice)
+            switch (menuChoice)
             {
                 case Menu.ADD:
                     checkInput = false;
@@ -116,7 +116,6 @@ namespace Task_1
                         key = GetInt(ref checkInput);
                     }
                     tree.DeleteNode(tree, key);
-                    menu_tree(tree, ref elements);
                     break;
                 case Menu.SEARCH:
                     checkInput = false;
@@ -179,7 +178,7 @@ namespace Task_1
                     }
                     break;
             }
-            menu_tree(tree, ref elements);
+            MenuTree(tree, ref elements);
         }
     }
 }
