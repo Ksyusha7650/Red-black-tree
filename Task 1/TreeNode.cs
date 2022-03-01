@@ -18,7 +18,6 @@ namespace Task_1
         public TreeNode? parent;
         public ColorNode color = ColorNode.BLACK;
         public bool isLeaf = false;
-        //public TreeNode? node { get; set; }
         public TreeNode(int value) => data = value;
         public TreeNode(bool isLeafM) => isLeaf = isLeafM;
     }
