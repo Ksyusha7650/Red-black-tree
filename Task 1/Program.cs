@@ -9,11 +9,11 @@ class Program
         Console.ForegroundColor = ConsoleColor.Black;
         Console.Clear();
         List<Int32> elements = new List<Int32>();
-        Interface.greetings();
-        Interface.choose_input(ref elements);
+        Interface.Greetings();
+        Interface.ChooseInput(ref elements);
         Tree tree = new Tree();
         Tree.MakeTree(elements, ref tree);
         tree.DisplayTree(tree);
-        Interface.menu_tree(tree, ref elements);
+        Interface.MenuTree(tree, ref elements);
     }
 }

@@ -3,41 +3,69 @@ using Task_1;
 
 namespace Tests
 {
-    public enum Nodes_data { FIRST = 5, SECOND = 3, THIRD = 7 }
+    public enum NodesData { FIRST = 5, SECOND = 3, THIRD = 7 }
     [TestClass]
     public class TreeTests
     {
         [TestMethod]
-        public void Main()
-        {
-            Tree tree_known = new Tree();
-            tree_known.root = new TreeNode((int)Nodes_data.FIRST);
-            tree_known.root.left = new TreeNode((int)Nodes_data.SECOND);
-            tree_known.root.right = new TreeNode((int)Nodes_data.THIRD);
-            Tree tree_test = new Tree();
-            check_insert(tree_known, ref tree_test);
-            check_delete(tree_test);
 
-        }
-        public void check_insert(Tree tree_known, ref Tree tree_test)
+        public void checkInsert()
         {
-            tree_test.insert_node(ref tree_test.root, (int)Nodes_data.FIRST);
-            tree_test.insert_node(ref tree_test.root, (int)Nodes_data.SECOND);
-            tree_test.insert_node(ref tree_test.root, (int)Nodes_data.THIRD);
-            Assert.AreEqual(tree_test.root.data, tree_known.root.data);
-            Assert.AreEqual(tree_test.root.left.data, tree_known.root.left.data);
-            Assert.AreEqual(tree_test.root.right.data, tree_known.root.right.data);
+            Tree treeKnown = new Tree();
+            treeKnown.root = new TreeNode((int)NodesData.FIRST);
+            treeKnown.root.left = new TreeNode((int)NodesData.SECOND);
+            treeKnown.root.right = new TreeNode((int)NodesData.THIRD);
+            Tree treeTest = new Tree();
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.FIRST);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.SECOND);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.THIRD);
+            Assert.AreEqual(treeTest.root.data, treeKnown.root.data);
+            Assert.AreEqual(treeTest.root.left.data, treeKnown.root.left.data);
+            Assert.AreEqual(treeTest.root.right.data, treeKnown.root.right.data);
         }
 
-        public void check_delete(Tree tree_test)
+        [TestMethod]
+        public void checkDelete()
         {
-            tree_test.delete_node(tree_test, (int)Nodes_data.SECOND);
-            Assert.IsTrue(tree_test.root.left.is_leaf);
+            Tree treeTest = new Tree();
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.FIRST);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.SECOND);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.THIRD);
+            treeTest.DeleteNode(treeTest, (int)NodesData.SECOND);
+            Assert.IsTrue(treeTest.root.left.isLeaf);
         }
 
-        public void check_min(Tree tree_known)
+        [TestMethod]
+        public void checkMin()
         {
-            Assert.AreEqual(tree_known.tree_minimum(tree_known.root).data, (int)Nodes_data.SECOND);
+            Tree treeTest = new Tree();
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.FIRST);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.SECOND);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.THIRD);
+            TreeNode minNode = treeTest.TreeMinimum(treeTest.root);
+            Assert.AreEqual(minNode.data, (int)NodesData.SECOND);
+        }
+
+        [TestMethod]
+        public void checkMax()
+        {
+            Tree treeTest = new Tree();
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.FIRST);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.SECOND);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.THIRD);
+            TreeNode maxNode = treeTest.TreeMaximum(treeTest.root);
+            Assert.AreEqual(maxNode.data, (int)NodesData.THIRD);
+        }
+
+        [TestMethod]
+        public void checkHeight()
+        {
+            Tree treeTest = new Tree();
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.FIRST);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.SECOND);
+            treeTest.InsertNode(ref treeTest.root, (int)NodesData.THIRD);
+            int height = treeTest.Height(treeTest);
+            Assert.AreEqual(height, 1);
         }
     }
 }
